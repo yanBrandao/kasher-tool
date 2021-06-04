@@ -1,19 +1,40 @@
-import kafka.KafkaConstants.Companion.TRANSACTION_KEY
+import kafka.KafkaConstants
 import kafka.KasherProducer
+import kafka.Parameter
 import org.apache.kafka.clients.producer.ProducerRecord
-import org.apache.kafka.common.header.internals.RecordHeader
-import java.time.Duration
+import kotlin.system.exitProcess
+
 
 fun main(args: Array<String>) {
-    val topicName = args[0]
-    val message = args[1]
-    val header = args[2]
-    val producer = KasherProducer.create()
+    val parameters = Parameter()
+    val help = parameters.help(args)
+    if (help) {
+        showHelp()
+        exitProcess(0)
+    }
 
-    val record = ProducerRecord<Long, String>(topicName, message)
-    record.headers().add(RecordHeader(TRANSACTION_KEY, header.toByteArray()))
+    KasherProducer.create(
+        parameters.broker(args),
+        parameters.clientId(args)
+    ).use {
+        val record = ProducerRecord<String, String>(
+            parameters.topic(args),
+            parameters.data(args)
+        )
+        parameters.headers(args).forEach(record.headers()::add)
+        it.send(record)
+    }
+}
 
-    producer.send(record)
-
-    producer.close(Duration.ofSeconds(10))
+fun showHelp() {
+    println(
+        """
+        Options:
+        ${KafkaConstants.HEADER_PARAMETER}  Headers: ${KafkaConstants.HEADER_PARAMETER} name${KafkaConstants.HEADER_PARAMETER_SEPARATOR}value ${KafkaConstants.HEADER_PARAMETER} name${KafkaConstants.HEADER_PARAMETER_SEPARATOR}value 
+        ${KafkaConstants.KAFKA_BROKER_PARAMETER}  broker:port
+        ${KafkaConstants.CLIENT_ID_PARAMETER}  ClientId
+        ${KafkaConstants.TOPIC_PARAMETER}  Topic name
+        ${KafkaConstants.DATA_MESSAGE_PARAMETER}  Conteúdo da mensagem. Não deve conter espaços
+    """.trimIndent()
+    )
 }
