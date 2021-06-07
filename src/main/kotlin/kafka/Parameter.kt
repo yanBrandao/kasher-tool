@@ -5,7 +5,7 @@ import org.apache.kafka.common.header.internals.RecordHeader
 
 class Parameter {
 
-    private val helpMessage = " Para mais informações utilie ${KafkaConstants.HELP_PARAMETER}"
+    private val helpMessage = " Para mais informações utilize ${KafkaConstants.HELP_PARAMETER}"
 
     fun help(args: Array<String>): Boolean = args.contains(KafkaConstants.HELP_PARAMETER)
 
@@ -38,7 +38,8 @@ class Parameter {
         for (index in args.indices) {
             val value = args[index]
             if (value.equals(key, true)) {
-                return args[index + 1]
+                return getSafeValue(args, index + 1)
+                    ?: throw RuntimeException("Não foi encontrado valor para o parâmetro $key")
             }
         }
         return null
@@ -52,6 +53,16 @@ class Parameter {
                 positions += index + 1
             }
         }
-        return args.filterIndexed { index, _ -> positions.contains(index) }
+        return positions.map {
+            getSafeValue(args, it)
+                ?: throw RuntimeException("Não foi encontrado valor para o parâmetro $key")
+        }
     }
+
+    private fun getSafeValue(args: Array<String>, position: Int) =
+        if (position > -1 && position < args.size) sanityCheckValue(args[position]) else null
+
+    private fun sanityCheckValue(value: String) =
+        if (value.startsWith("-", true)) null else value
+
 }

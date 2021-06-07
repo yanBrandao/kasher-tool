@@ -4,7 +4,6 @@ import kafka.Parameter
 import org.apache.kafka.clients.producer.ProducerRecord
 import kotlin.system.exitProcess
 
-
 fun main(args: Array<String>) {
     val parameters = Parameter()
     val help = parameters.help(args)
@@ -27,8 +26,7 @@ fun main(args: Array<String>) {
 }
 
 fun showHelp() {
-    println(
-        """
+    println("""
         Options:
         ${KafkaConstants.HEADER_PARAMETER}  Headers: ${KafkaConstants.HEADER_PARAMETER} name${KafkaConstants.HEADER_PARAMETER_SEPARATOR}value ${KafkaConstants.HEADER_PARAMETER} name${KafkaConstants.HEADER_PARAMETER_SEPARATOR}value 
         ${KafkaConstants.KAFKA_BROKER_PARAMETER}  broker:port
