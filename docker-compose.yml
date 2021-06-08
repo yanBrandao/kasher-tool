@@ -1,6 +1,14 @@
 ---
 version: '2'
 services:
+  kafka-setup:
+    image: wurstmeister/kafka
+    hostname: kafka-setup
+    container_name: kafka-setup
+    command: bash -c "kafka-topics.sh --create --bootstrap-server broker:29092 --replication-factor 1 --partitions 1 --topic kasher-sample-topic;"
+    depends_on: 
+      - broker
+
   zookeeper:
     image: confluentinc/cp-zookeeper:6.1.1
     hostname: zookeeper
