@@ -2,8 +2,12 @@ package kafka
 
 class KafkaConstants {
     companion object {
-        const val KAFKA_BROKERS =  "localhost:9092"
-        const val CLIENT_ID = "a4aefd07-af07-44f2-8d7d-5a33d8fcb0cf"
-        const val TRANSACTION_KEY = "transactionID"
+        const val HEADER_PARAMETER = "-h"
+        const val HEADER_PARAMETER_SEPARATOR = "="
+        const val KAFKA_BROKER_PARAMETER = "-b"
+        const val CLIENT_ID_PARAMETER = "-c"
+        const val TOPIC_PARAMETER = "-t"
+        const val DATA_MESSAGE_PARAMETER = "-d"
+        const val HELP_PARAMETER = "--help"
     }
 }
