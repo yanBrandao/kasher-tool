@@ -1,9 +1,11 @@
 FROM gradle:7.0.2-jdk11
-WORKDIR app/
+WORKDIR /app/
 
 COPY . .
 
-RUN ./gradlew build
+RUN ./gradlew clean build jar
 
-CMD ./gradlew run --args="send-message-topic mensagem_test 1"
+RUN mv build/libs/kasher* /app/app.jar
+
+ENTRYPOINT [ "java", "-jar", "app.jar" ]
 

@@ -18,11 +18,23 @@ docker-compose up
 
 Although kafka enviroment, there's a service to create sample topic named: `kasher-sample-topic`
 
+When Control-Center with Kafka finish his running, It's possible to build kasher image, for this just do one of two commands below to get our image:
+
+ - Pull image from docker hub:
+```shell
+docker pull yanbrandao/kasher-tool
+```
+ - Build with source files:
+```shell
+docker build -t kasher-tool .
+```
+
 Now it's possible to send message using kasher-tool image, using command below
 
-```shell
-docker run --network host --name kasher yanbrandao/kasher-tool
+```docker
+docker run --rm --network host --name kasher kasher-tool -b localhost:9092 -c uahe -t kasher-sample-topic -d "just a message test"
 ```
+> ⚠️ Remember that if you running Kafka local and kasher-tool isn't in compose, you need to use network host to connect to Kafka Broker.
 
 ## Authors
 
