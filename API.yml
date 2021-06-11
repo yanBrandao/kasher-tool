@@ -1,0 +1,79 @@
+openapi: 3.0.0
+servers: []
+info:
+  version: "1.0.0"
+  title: Kasher-tool API
+  contact:
+    email: william_cesar_santos@hotmail.com
+  license:
+    name: MIT License
+    url: 'https://github.com/yanBrandao/kasher-tool/blob/main/LICENSE'
+tags:
+  - name: producer
+    description: Producer a new message
+paths:
+  '/api/{topic-name}/producer':
+    post:
+      tags:
+        - producer
+      operationId: producerMessage
+      description: Producer a new message
+      parameters:
+        - name: topic-name
+          in: path
+          required: true
+          description: 'Topic name to publish a new message'
+          schema:
+            type: string
+            example: 'kasher-sample-topic'
+      responses:
+        '200':
+          description: 'Message published'
+        '400':
+          description: 'Invalid input, object invalid'
+        '500':
+          description: 'Internal server error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+components:
+  schemas:
+    Message:
+      type: object
+      required:
+        - broker
+        - data
+      properties:
+        broker:
+          type: string
+          example: 'localhost:9092'
+        clientId:
+          type: string
+          example: 'Identifier client who published a new message'
+        data:
+          type: string
+          format: json
+          example: '{"message" : "data_one"}'
+        headers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Header'
+        keySerializer:
+          type: string
+          example: 'org.apache.kafka.common.serialization.ByteArraySerializer'
+        valueSerializer:
+          type: string
+          example: 'org.apache.kafka.common.serialization.ByteArraySerializer'
+    Header:
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+          example: "transactionId"
+        value:
+          type: string
+          example: '408-867-5309'

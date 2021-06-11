@@ -1,4 +1,4 @@
-package kafka
+package br.com.brandao.parameter
 
 class KafkaConstants {
     companion object {

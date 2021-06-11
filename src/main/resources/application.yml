@@ -1,0 +1,5 @@
+micronaut:
+  application:
+    name: kasher-tool
+  server:
+    port: 8888

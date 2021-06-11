@@ -1,12 +1,12 @@
-package kafka
+package br.com.brandao.parameter
 
-import kafka.KafkaConstants.Companion.CLIENT_ID_PARAMETER
-import kafka.KafkaConstants.Companion.DATA_MESSAGE_PARAMETER
-import kafka.KafkaConstants.Companion.HEADER_PARAMETER
-import kafka.KafkaConstants.Companion.HEADER_PARAMETER_SEPARATOR
-import kafka.KafkaConstants.Companion.HELP_PARAMETER
-import kafka.KafkaConstants.Companion.KAFKA_BROKER_PARAMETER
-import kafka.KafkaConstants.Companion.TOPIC_PARAMETER
+import br.com.brandao.parameter.KafkaConstants.Companion.CLIENT_ID_PARAMETER
+import br.com.brandao.parameter.KafkaConstants.Companion.DATA_MESSAGE_PARAMETER
+import br.com.brandao.parameter.KafkaConstants.Companion.HEADER_PARAMETER
+import br.com.brandao.parameter.KafkaConstants.Companion.HEADER_PARAMETER_SEPARATOR
+import br.com.brandao.parameter.KafkaConstants.Companion.HELP_PARAMETER
+import br.com.brandao.parameter.KafkaConstants.Companion.KAFKA_BROKER_PARAMETER
+import br.com.brandao.parameter.KafkaConstants.Companion.TOPIC_PARAMETER
 import org.apache.kafka.common.header.Header
 import org.apache.kafka.common.header.internals.RecordHeader
 import java.util.*
@@ -21,9 +21,8 @@ class Parameter {
         findParameter(args, KAFKA_BROKER_PARAMETER)
             ?: throw RuntimeException("bootstrap server must be informed with param $KAFKA_BROKER_PARAMETER broker:port $helpMessage")
 
-    fun clientId(args: Array<String>): String =
+    fun clientId(args: Array<String>): String? =
         findParameter(args, CLIENT_ID_PARAMETER)
-            ?: "client-${UUID.randomUUID()}"
 
     fun topic(args: Array<String>): String =
         findParameter(args, TOPIC_PARAMETER)
