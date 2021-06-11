@@ -1,4 +1,6 @@
 import kafka.KafkaConstants
+import kafka.KafkaConstants.Companion.HEADER_PARAMETER
+import kafka.KafkaConstants.Companion.HEADER_PARAMETER_SEPARATOR
 import kafka.KasherProducer
 import kafka.Parameter
 import org.apache.kafka.clients.producer.ProducerRecord
@@ -28,11 +30,11 @@ fun main(args: Array<String>) {
 fun showHelp() {
     println("""
         Options:
-        ${KafkaConstants.HEADER_PARAMETER}  Headers: ${KafkaConstants.HEADER_PARAMETER} name${KafkaConstants.HEADER_PARAMETER_SEPARATOR}value ${KafkaConstants.HEADER_PARAMETER} name${KafkaConstants.HEADER_PARAMETER_SEPARATOR}value 
-        ${KafkaConstants.KAFKA_BROKER_PARAMETER}  broker:port
-        ${KafkaConstants.CLIENT_ID_PARAMETER}  ClientId
-        ${KafkaConstants.TOPIC_PARAMETER}  Topic name
-        ${KafkaConstants.DATA_MESSAGE_PARAMETER}  Conteúdo da mensagem. Não deve conter espaços
+        $HEADER_PARAMETER  Headers: $HEADER_PARAMETER name${HEADER_PARAMETER_SEPARATOR}value $HEADER_PARAMETER name${HEADER_PARAMETER_SEPARATOR}value 
+        ${KafkaConstants.KAFKA_BROKER_PARAMETER}  boostrap.server where you broker is located (url:port)
+        ${KafkaConstants.CLIENT_ID_PARAMETER}  information for client that make request
+        ${KafkaConstants.TOPIC_PARAMETER}  Topic name that want to produce/consume message
+        ${KafkaConstants.DATA_MESSAGE_PARAMETER}  Message content. Value must have in quotation marks ("sample")
     """.trimIndent()
     )
 }

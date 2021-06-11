@@ -1,61 +1,70 @@
 package kafka
 
+import kafka.KafkaConstants.Companion.CLIENT_ID_PARAMETER
+import kafka.KafkaConstants.Companion.DATA_MESSAGE_PARAMETER
+import kafka.KafkaConstants.Companion.HEADER_PARAMETER
+import kafka.KafkaConstants.Companion.HEADER_PARAMETER_SEPARATOR
+import kafka.KafkaConstants.Companion.HELP_PARAMETER
+import kafka.KafkaConstants.Companion.KAFKA_BROKER_PARAMETER
+import kafka.KafkaConstants.Companion.TOPIC_PARAMETER
 import org.apache.kafka.common.header.Header
 import org.apache.kafka.common.header.internals.RecordHeader
+import java.util.*
 
 class Parameter {
 
-    private val helpMessage = " Para mais informações utilize ${KafkaConstants.HELP_PARAMETER}"
+    private val helpMessage = " For more information use $HELP_PARAMETER"
 
-    fun help(args: Array<String>): Boolean = args.contains(KafkaConstants.HELP_PARAMETER)
+    fun help(args: Array<String>): Boolean = args.contains(HELP_PARAMETER)
 
     fun broker(args: Array<String>): String =
-        findParameter(args, KafkaConstants.KAFKA_BROKER_PARAMETER)
-            ?: throw RuntimeException("Kafka broker deve ser informado com o parametro ${KafkaConstants.KAFKA_BROKER_PARAMETER} broker:port $helpMessage")
+        findParameter(args, KAFKA_BROKER_PARAMETER)
+            ?: throw RuntimeException("bootstrap server must be informed with param $KAFKA_BROKER_PARAMETER broker:port $helpMessage")
 
     fun clientId(args: Array<String>): String =
-        findParameter(args, KafkaConstants.CLIENT_ID_PARAMETER)
-            ?: throw RuntimeException("Client id deve ser informado com o parametro ${KafkaConstants.CLIENT_ID_PARAMETER} value $helpMessage")
+        findParameter(args, CLIENT_ID_PARAMETER)
+            ?: "client-${UUID.randomUUID()}"
 
     fun topic(args: Array<String>): String =
-        findParameter(args, KafkaConstants.TOPIC_PARAMETER)
-            ?: throw RuntimeException("Topic deve ser informado com o parametro ${KafkaConstants.TOPIC_PARAMETER} topicName $helpMessage")
+        findParameter(args, TOPIC_PARAMETER)
+            ?: throw RuntimeException("Topic must be informed with param $TOPIC_PARAMETER topicName $helpMessage")
 
     fun data(args: Array<String>): String =
-        findParameter(args, KafkaConstants.DATA_MESSAGE_PARAMETER)
-            ?: throw RuntimeException("Valor para a mensagem deve ser informado com o parametro ${KafkaConstants.DATA_MESSAGE_PARAMETER} value $helpMessage")
+        findParameter(args, DATA_MESSAGE_PARAMETER)
+            ?: throw RuntimeException("Message must be informed with param $DATA_MESSAGE_PARAMETER value $helpMessage")
 
-    fun headers(args: Array<String>): Iterable<Header> =
-        findParameterMultipleValue(args, KafkaConstants.HEADER_PARAMETER)
+    fun headers(args: Array<String>): Iterable<Header> {
+        return findParameterMultipleHeaderValue(args)
             .map {
-                val values = it.split(KafkaConstants.HEADER_PARAMETER_SEPARATOR)
+                val values = it.split(HEADER_PARAMETER_SEPARATOR)
                 val key = values[0]
                 val value = values[1]
                 RecordHeader(key, value.toByteArray())
             }
+    }
 
     private fun findParameter(args: Array<String>, key: String): String? {
         for (index in args.indices) {
             val value = args[index]
             if (value.equals(key, true)) {
                 return getSafeValue(args, index + 1)
-                    ?: throw RuntimeException("Não foi encontrado valor para o parâmetro $key")
+                    ?: throw RuntimeException("Could not found value for param $key")
             }
         }
         return null
     }
 
-    private fun findParameterMultipleValue(args: Array<String>, key: String): Iterable<String> {
+    private fun findParameterMultipleHeaderValue(args: Array<String>): Iterable<String> {
         val positions = mutableListOf<Int>()
         for (index in args.indices) {
             val value = args[index]
-            if (value.equals(key, true)) {
+            if (value.equals(HEADER_PARAMETER, true)) {
                 positions += index + 1
             }
         }
         return positions.map {
             getSafeValue(args, it)
-                ?: throw RuntimeException("Não foi encontrado valor para o parâmetro $key")
+                ?: throw RuntimeException("Could not found value for param $HEADER_PARAMETER")
         }
     }
 
