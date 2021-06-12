@@ -7,9 +7,8 @@ import org.apache.kafka.common.serialization.LongSerializer
 import org.apache.kafka.common.serialization.StringSerializer
 import java.util.*
 
-class KasherProducer {
-    companion object {
-        fun create(
+open class KasherProducer {
+        open fun create(
             kafkaBroker: String,
             clientId: String
         ): Producer<String, String> {
@@ -20,5 +19,4 @@ class KasherProducer {
             props[VALUE_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java.name
             return KafkaProducer(props)
         }
-    }
 }

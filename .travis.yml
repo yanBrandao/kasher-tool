@@ -1,0 +1,15 @@
+language: kotlin
+
+jdk:
+  - openjdk11
+
+cache:
+  directories:
+    - .autoconf
+    - $HOME/.m2
+
+script:
+  ./gradlew clean build
+
+after_success:
+  - ./gradlew test jacocoTestReport coverallsJacoco
