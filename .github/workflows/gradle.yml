@@ -25,4 +25,4 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew build coveralls
+      run: echo $COVERALLS_REPO_TOKEN && ./gradlew build coveralls
