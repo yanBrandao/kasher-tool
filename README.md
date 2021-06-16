@@ -1,6 +1,6 @@
 ![kasher-icon](https://user-images.githubusercontent.com/5366951/120748039-7b90cf80-c4d8-11eb-9fbe-27b30f2fe379.png)
 # kasher-tool
-![dockerhub](https://img.shields.io/docker/cloud/build/yanbrandao/kasher-tool) ![docker pull](https://img.shields.io/docker/pulls/yanbrandao/kasher-tool)
+![dockerhub](https://img.shields.io/docker/cloud/build/yanbrandao/kasher-tool) ![docker pull](https://img.shields.io/docker/pulls/yanbrandao/kasher-tool) [![Coverage Status](https://coveralls.io/repos/github/yanBrandao/kasher-tool/badge.svg?branch=main)](https://coveralls.io/github/yanBrandao/kasher-tool?branch=main)
 
 Kasher is a handy kafka tool 
 
