@@ -10,7 +10,7 @@ open class KasherProducer {
         open fun create(
             kafkaBroker: String,
             clientId: String
-        ): Producer<String, String> {
+        ): Producer<ByteArray, ByteArray> {
             val props = Properties()
             props[BOOTSTRAP_SERVERS_CONFIG] = kafkaBroker
             props[CLIENT_ID_CONFIG] = clientId

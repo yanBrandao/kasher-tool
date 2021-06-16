@@ -3,6 +3,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import kafka.KasherProducer
 import org.apache.kafka.clients.producer.MockProducer
+import org.apache.kafka.common.serialization.ByteArraySerializer
 import org.apache.kafka.common.serialization.StringSerializer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.assertThrows
 internal class MainKtTest {
 
     private val producer: KasherProducer = mock()
-    private val kafkaProducer = MockProducer(true, StringSerializer(), StringSerializer())
+    private val kafkaProducer = MockProducer(true, ByteArraySerializer(), ByteArraySerializer())
 
     @BeforeEach
     fun setup() {

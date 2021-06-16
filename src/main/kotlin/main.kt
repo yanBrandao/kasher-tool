@@ -20,9 +20,9 @@ class ProjectMainKt(private val producer: KasherProducer) {
                 parameters.broker(args),
                 parameters.clientId(args)
             ).use {
-                val record = ProducerRecord<String, String>(
+                val record = ProducerRecord<ByteArray, ByteArray>(
                     parameters.topic(args),
-                    parameters.data(args)
+                    parameters.data(args).encodeToByteArray()
                 )
                 parameters.headers(args).forEach(record.headers()::add)
                 it.send(record)
