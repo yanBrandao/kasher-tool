@@ -4,6 +4,7 @@ import br.com.brandao.kafka.KafkaMessage
 import br.com.brandao.kafka.KafkaProperties
 import io.micronaut.core.annotation.Introspected
 import org.apache.kafka.common.header.internals.RecordHeader
+import org.apache.kafka.common.serialization.ByteArraySerializer
 import org.apache.kafka.common.serialization.Serializer
 import org.apache.kafka.common.serialization.StringSerializer
 import javax.validation.Valid
@@ -27,8 +28,8 @@ data class KafkaAdapter(
         return KafkaProperties(
             kafkaBroker = broker!!,
             clientId = clientId,
-            keySerializer = keySerializer?.let { Class.forName(it).kotlin as KClass<StringSerializer> },
-            valueSerializer = valueSerializer?.let { Class.forName(it).kotlin as KClass<StringSerializer> },
+            keySerializer = keySerializer?.let { Class.forName(it).kotlin as KClass<ByteArraySerializer> },
+            valueSerializer = valueSerializer?.let { Class.forName(it).kotlin as KClass<ByteArraySerializer> },
         )
     }
 

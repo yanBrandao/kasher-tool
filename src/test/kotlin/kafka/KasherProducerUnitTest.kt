@@ -9,23 +9,18 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
-import org.apache.kafka.common.KafkaException
-import org.apache.kafka.common.header.Header
-import org.apache.kafka.common.serialization.Serializer
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.lang.IllegalArgumentException
-import kotlin.reflect.KClass
 
 internal class KasherProducerUnitTest {
 
     private val properties = KafkaProperties(kafkaBroker = "unit-test")
     private val message = KafkaMessage(topic = "topic", data = "data")
+    private val timeout = 60L
 
-    private lateinit var kafkaProducer: KafkaProducer<String, String>
-    private lateinit var record: ProducerRecord<String, String>
+    private lateinit var kafkaProducer: KafkaProducer<ByteArray, ByteArray>
+    private lateinit var record: ProducerRecord<ByteArray, ByteArray>
     private lateinit var factory: KafkaFactory
     private lateinit var producer: KasherProducer
 
@@ -38,7 +33,7 @@ internal class KasherProducerUnitTest {
         every { factory.create(properties) } returns kafkaProducer
         every { factory.create(message) } returns record
 
-        producer = KasherProducer(factory)
+        producer = KasherProducer(factory, timeout)
     }
 
     @Test
@@ -56,6 +51,16 @@ internal class KasherProducerUnitTest {
     @Test
     fun `producer must close kafkaProducer`() {
         producer.publish(properties, message)
+
+        verify (exactly = 1) { kafkaProducer.close() }
+    }
+
+    @Test
+    fun `producer must close kafkaProducer when exception has occurred`() {
+        producer.publish(properties, message)
+
+        every { producer.publish(any(), any()) } throws IllegalArgumentException()
+        assertThrows<IllegalArgumentException> { producer.publish(properties, message) }
 
         verify (exactly = 1) { kafkaProducer.close() }
     }

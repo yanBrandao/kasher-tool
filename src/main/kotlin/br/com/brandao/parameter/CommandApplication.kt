@@ -4,7 +4,6 @@ import br.com.brandao.Application
 import br.com.brandao.kafka.KafkaMessage
 import br.com.brandao.kafka.KafkaProperties
 import br.com.brandao.kafka.KasherProducer
-import kotlin.system.exitProcess
 
 class CommandApplication(
     private val producer: KasherProducer
@@ -15,19 +14,18 @@ class CommandApplication(
         val help = parameters.help(args)
         if (help) {
             showHelp()
-            exitProcess(0)
+        } else {
+            val properties = KafkaProperties(
+                kafkaBroker = parameters.broker(args),
+                clientId = parameters.clientId(args)
+            )
+            val message = KafkaMessage(
+                topic = parameters.topic(args),
+                data = parameters.data(args),
+                headers = parameters.headers(args)
+            )
+            producer.publish(properties, message)
         }
-
-        val properties = KafkaProperties(
-            kafkaBroker = parameters.broker(args),
-            clientId = parameters.clientId(args)
-        )
-        val message = KafkaMessage(
-            topic = parameters.topic(args),
-            data = parameters.data(args),
-            headers = parameters.headers(args)
-        )
-        producer.publish(properties, message)
     }
 
     private fun showHelp() {

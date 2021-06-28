@@ -3,3 +3,6 @@ micronaut:
     name: kasher-tool
   server:
     port: 8888
+kasher:
+  publish:
+    timeout: 30

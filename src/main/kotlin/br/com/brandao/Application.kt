@@ -20,7 +20,8 @@ class ApplicationFactory {
                 ApplicationMode.REST -> RestApplication()
                 else -> CommandApplication(
                     KasherProducer(
-                        KafkaFactory()
+                        KafkaFactory(),
+                        60
                     )
                 )
             }

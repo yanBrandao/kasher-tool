@@ -4,6 +4,7 @@ import br.com.brandao.kafka.KafkaFactory
 import br.com.brandao.kafka.KafkaMessage
 import br.com.brandao.kafka.KafkaProperties
 import org.apache.kafka.common.header.internals.RecordHeader
+import org.apache.kafka.common.serialization.ByteArraySerializer
 import org.apache.kafka.common.serialization.StringSerializer
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -16,8 +17,8 @@ class KafkaFactoryUnitTest {
             KafkaProperties(
                 kafkaBroker = "localhost:9092",
                 clientId = "clientId",
-                keySerializer = StringSerializer::class,
-                valueSerializer = StringSerializer::class
+                keySerializer = ByteArraySerializer::class,
+                valueSerializer = ByteArraySerializer::class
             )
         )
         Assertions.assertNotNull(producer)
